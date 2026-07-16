@@ -1,3 +1,4 @@
+import pytest
 from fastapi.testclient import TestClient
 
 from ai_service_api.main import app
@@ -18,10 +19,11 @@ def test_inspect_prompt() -> None:
     }
 
 
-def test_inspect_prompt_rejects_empty_prompt() -> None:
+@pytest.mark.parametrize("prompt", ["", "   "])
+def test_inspect_prompt_rejects_blank_prompt(prompt: str) -> None:
     response = client.post(
         "/v1/prompts/inspect",
-        json={"prompt": ""},
+        json={"prompt": prompt},
     )
 
     assert response.status_code == 422
