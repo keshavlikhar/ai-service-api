@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 
+from ai_service_api.api.routes.prompts import router as prompts_router
 from ai_service_api.config import Settings
 
 
@@ -10,6 +11,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         title=app_settings.app_name,
         version=app_settings.app_version,
     )
+
+    application.include_router(prompts_router)
 
     @application.get("/health", tags=["health"])
     def health_check() -> dict[str, str]:

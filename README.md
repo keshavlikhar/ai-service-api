@@ -14,6 +14,7 @@ version control.
 - Reproducible dependency management with uv
 - Non-root Docker container
 - Docker Compose health checks
+- Versioned prompt inspection endpoint at `POST /v1/prompts/inspect`
 
 ## Prerequisites
 
@@ -77,6 +78,30 @@ Stop the service and remove its container and network:
 
 ```bash
 docker compose down
+```
+
+## API endpoints
+
+| Method | Path | Description |
+| --- | --- | --- |
+| `GET` | `/health` | Reports service availability |
+| `POST` | `/v1/prompts/inspect` | Returns prompt character and word counts |
+
+Example request:
+
+```json
+{
+  "prompt": "Build reliable AI services"
+}
+```
+
+Example response:
+
+```json
+{
+  "character_count": 26,
+  "word_count": 4
+}
 ```
 
 ## Project structure
