@@ -1,0 +1,25 @@
+# Version control
+.git
+
+# Local Python environment and caches
+.venv
+__pycache__
+*.py[cod]
+.pytest_cache
+.ruff_cache
+.mypy_cache
+
+# Test and coverage artifacts
+.coverage
+htmlcov
+tests
+
+# Local configuration and secrets
+.env
+.env.*
+!.env.example
+
+# Editor and operating-system files
+.vscode
+.idea
+.DS_Store
