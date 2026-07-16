@@ -101,3 +101,24 @@ docker compose down
 - `tests/` contains automated behavior checks.
 - `Dockerfile` defines the production container image.
 - `compose.yaml` defines how the container runs locally.
+## Configuration
+
+Application settings use environment variables prefixed with `AI_SERVICE_`.
+
+For local overrides, copy the template:
+
+```bash
+cp .env.example .env
+```
+
+Supported settings:
+
+| Variable | Default | Description |
+| --- | --- | --- |
+| `AI_SERVICE_APP_NAME` | `AI Service API` | Name shown in OpenAPI metadata |
+| `AI_SERVICE_APP_VERSION` | `0.1.0` | Version shown in OpenAPI metadata |
+| `AI_SERVICE_ENVIRONMENT` | `development` | Runtime environment: `development`, `test`, or `production` |
+
+The `.env` file is ignored by Git and Docker. Never commit API keys or other
+secrets. Add safe placeholders to `.env.example` when new settings are
+introduced.
