@@ -1,5 +1,7 @@
+import logging
 from uuid import UUID
 
+import pytest
 from fastapi.testclient import TestClient
 
 from ai_service_api.config import Settings
@@ -46,3 +48,20 @@ def test_each_response_receives_unique_request_id() -> None:
         first_response.headers["x-request-id"]
         != second_response.headers["x-request-id"]
     )
+
+
+def test_request_completion_is_logged(
+    caplog: pytest.LogCaptureFixture,
+) -> None:
+    with caplog.at_level(logging.INFO, logger="ai_service_api.requests"):
+        response = client.get("/health")
+
+    record = next(
+        record for record in caplog.records if record.message == "request_completed"
+    )
+
+    assert record.request_id == response.headers["x-request-id"]
+    assert record.method == "GET"
+    assert record.path == "/health"
+    assert record.status_code == 200
+    assert record.duration_ms >= 0
