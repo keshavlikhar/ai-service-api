@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from fastapi.testclient import TestClient
 
 from ai_service_api.config import Settings
@@ -26,3 +28,21 @@ def test_app_uses_configured_metadata() -> None:
     assert response.status_code == 200
     assert response.json()["info"]["title"] == "Test AI API"
     assert response.json()["info"]["version"] == "9.9.9"
+
+
+def test_response_includes_valid_request_id() -> None:
+    response = client.get("/health")
+
+    request_id = response.headers["x-request-id"]
+
+    assert UUID(request_id).version == 4
+
+
+def test_each_response_receives_unique_request_id() -> None:
+    first_response = client.get("/health")
+    second_response = client.get("/health")
+
+    assert (
+        first_response.headers["x-request-id"]
+        != second_response.headers["x-request-id"]
+    )
