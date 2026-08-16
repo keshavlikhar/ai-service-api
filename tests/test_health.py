@@ -53,8 +53,14 @@ def test_each_response_receives_unique_request_id() -> None:
 def test_request_completion_is_logged(
     caplog: pytest.LogCaptureFixture,
 ) -> None:
-    with caplog.at_level(logging.INFO, logger="ai_service_api.requests"):
-        response = client.get("/health")
+    request_logger = logging.getLogger("ai_service_api.requests")
+    request_logger.addHandler(caplog.handler)
+
+    try:
+        with caplog.at_level(logging.INFO, logger=request_logger.name):
+            response = client.get("/health")
+    finally:
+        request_logger.removeHandler(caplog.handler)
 
     record = next(
         record for record in caplog.records if record.message == "request_completed"

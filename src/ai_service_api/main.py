@@ -2,6 +2,7 @@ from fastapi import FastAPI
 
 from ai_service_api.api.routes.prompts import router as prompts_router
 from ai_service_api.config import Settings
+from ai_service_api.logging_config import configure_logging
 from ai_service_api.middleware.request_id import RequestIDMiddleware
 
 
@@ -23,4 +24,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     return application
 
 
+configure_logging()
 app = create_app()
